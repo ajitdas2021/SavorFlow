@@ -50,7 +50,7 @@ export default class ReceptionistView extends LightningElement {
             
                 const now      = new Date();
                 const nowMins  = now.getHours() * 60 + now.getMinutes();
-                const inWindow = (nowMins >= 540 && nowMins < 960);
+                const inWindow = (nowMins >= 540 && nowMins < 720);
             const hasDiscount = (category === 'Meal' && inWindow);
             const finalTotal    = hasDiscount
                                    ? parseFloat((originalTotal * 0.85).toFixed(2))

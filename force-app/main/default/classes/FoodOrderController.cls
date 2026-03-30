@@ -128,7 +128,7 @@ public with sharing class FoodOrderController {
         DateTime nowUTC    = DateTime.now();
         Integer  totalMins = nowUTC.hour() * 60 + nowUTC.minute() + 345;
         totalMins          = Math.mod(totalMins, 1440);
-        Boolean isDiscountTime = (totalMins >= 540 && totalMins < 960);
+        Boolean isDiscountTime = (totalMins >= 540 && totalMins < 720);
 
         // Build new Order Items
         List<Order_Item__c> itemsToInsert = new List<Order_Item__c>();
@@ -232,7 +232,7 @@ public with sharing class FoodOrderController {
         DateTime nowUTC    = DateTime.now();
         Integer  totalMins = nowUTC.hour() * 60 + nowUTC.minute() + 345;
         totalMins          = Math.mod(totalMins, 1440);
-        Boolean isDiscountTime = (totalMins >= 540 && totalMins < 960);
+        Boolean isDiscountTime = (totalMins >= 540 && totalMins < 720);
 
         // ── Insert Order ───────────────────────────────────────────────────
         Order__c order           = new Order__c();

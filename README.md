@@ -202,7 +202,7 @@ force-app/main/default/
 
 ### Meal Discount
 - 15% discount automatically applied to all Meal category items
-- Active window: **9:00 AM to 4:00 PM (NPT)**
+- Active window: **9:00 AM to 12:00 PM (NPT)**
 - Discount calculated and saved in `Discount_Amount__c` at order time
 - Shown to waiter on menu cards and order summary
 

@@ -45,7 +45,7 @@ export default class FoodOrderScreen extends LightningElement {
     get isMealDiscountTime() {
         const now     = new Date();
         const nowMins = now.getHours() * 60 + now.getMinutes();
-        return nowMins >= 540 && nowMins < 960;
+        return nowMins >= 540 && nowMins < 720;
     }
 
     // ── Wire Food Items ────────────────────
