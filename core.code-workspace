@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "/Users/ajitdas/Desktop/SavorFlow"
+    }
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      "/Users/ajitdas/Desktop/SavorFlow"
+    ],
+    "eslint.validate": [
+      "javascript",
+      "typescript"
+    ],
+    "eslint.options": {
+      "overrideConfigFile": "/Users/ajitdas/Desktop/SavorFlow/.eslintrc.json"
+    }
+  }
+}

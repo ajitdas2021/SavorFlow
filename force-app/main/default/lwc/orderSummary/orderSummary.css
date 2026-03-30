@@ -1,0 +1,8 @@
+.sf-order {
+    border-left: 1px solid #ddd;
+    padding: 10px;
+}
+
+.total {
+    font-weight: bold;
+}

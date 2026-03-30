@@ -1,0 +1,581 @@
+/* ════════════════════════════════════════
+   SAVOR FLOW — Waiter Order Screen
+   Clean & Modern | Salesforce LWC
+════════════════════════════════════════ */
+
+:host {
+    display: block;
+    height: 100vh;
+    font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --blue      : #0176d3;
+    --orange    : #e67e00;
+    --orange-dark: #cc6f00;
+    --border    : #e5e7eb;
+    --bg        : #f4f6f9;
+    --white     : #ffffff;
+    --text      : #111827;
+    --muted     : #6b7280;
+}
+
+/* ── Layout ───────────────────────────── */
+.sf-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    height: 100vh;
+    background: var(--bg);
+    overflow: hidden;
+}
+
+/* ── Menu Panel ───────────────────────── */
+.sf-menu {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    overflow: hidden;
+    min-width: 0;
+}
+
+/* Top Bar */
+.sf-topbar {
+    background: var(--white);
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.sf-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sf-brand-icon { font-size: 26px; }
+
+.sf-brand-name {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+}
+
+.sf-savor { color: var(--orange); }
+.sf-flow  { color: var(--blue);   }
+
+.sf-brand-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+}
+
+.sf-badge {
+    background: var(--blue);
+    color: var(--white);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Category Tabs */
+.sf-cats {
+    background: var(--white);
+    padding: 10px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+}
+
+.sf-cat {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+}
+
+.sf-cat:hover { border-color: var(--blue); color: var(--blue); }
+
+.sf-cat-on {
+    background: var(--blue) !important;
+    border-color: var(--blue) !important;
+    color: var(--white) !important;
+}
+
+/* Food Grid */
+.sf-grid {
+    overflow-y: auto;
+    padding: 18px 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    align-content: start;
+}
+
+/* Empty state */
+.sf-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 2;
+}
+
+/* ── Order Panel ──────────────────────── */
+.sf-order {
+    background: var(--white);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.04);
+}
+
+.sf-order-head {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.sf-order-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.sf-order-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+.sf-order-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 18px;
+}
+
+/* Order Table */
+.sf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.sf-table thead tr {
+    border-bottom: 2px solid var(--light);
+}
+
+.sf-table th {
+    padding: 0 0 8px 0;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    text-align: left;
+}
+
+.th-qty, .th-price { text-align: center; }
+
+.sf-table tbody tr { border-bottom: 1px solid var(--light); }
+
+.sf-table td { padding: 9px 0; vertical-align: middle; }
+
+.td-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 12px;
+    max-width: 110px;
+}
+
+.td-qty { text-align: center; }
+
+.sf-qty-pill {
+    background: #eff6ff;
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 11px;
+    border-radius: 10px;
+    padding: 2px 8px;
+}
+
+.td-amt {
+    text-align: right;
+    font-weight: 700;
+    color: var(--blue);
+    font-size: 12px;
+}
+
+/* Totals */
+.sf-totals {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
+
+.sf-tot-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.sf-tot-grand {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    padding-top: 8px;
+    margin-top: 4px;
+    border-top: 2px solid var(--border);
+}
+
+/* Empty Order */
+.sf-order-empty {
+    text-align: center;
+    padding: 50px 16px;
+    color: var(--muted);
+}
+
+.sf-order-empty-icon { font-size: 36px; margin-bottom: 10px; }
+
+.sf-order-empty-txt {
+    font-weight: 600;
+    font-size: 13px;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+.sf-order-empty-sub { font-size: 12px; }
+
+/* Footer Buttons */
+.sf-order-foot {
+    padding: 14px 18px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sf-btn-place {
+    width: 100%;
+    padding: 12px;
+    background: var(--orange);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.sf-btn-place:hover:not(:disabled) { background: var(--orange-dark); }
+
+.sf-btn-place:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.sf-btn-clear {
+    width: 100%;
+    padding: 9px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.sf-btn-clear:hover:not(:disabled) { background: #f3f4f6; color: var(--text); }
+.sf-btn-clear:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Modal Overlay ────────────────────── */
+.sf-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sf-modal {
+    background: var(--white);
+    border-radius: 14px;
+    width: 400px;
+    max-width: 90vw;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+    overflow: hidden;
+    animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+.sf-modal-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sf-modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.sf-modal-close {
+    background: none;
+    border: none;
+    font-size: 15px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.sf-modal-close:hover { background: var(--light); color: var(--text); }
+
+.sf-modal-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Field */
+.sf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sf-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.sf-req { color: var(--red); margin-left: 2px; }
+
+.sf-auto-val {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 9px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+}
+
+.sf-input {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 9px 12px;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border 0.15s, box-shadow 0.15s;
+    font-family: inherit;
+}
+
+.sf-input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(1,118,211,0.12);
+}
+
+.sf-mini-summary {
+    background: #eff6ff;
+    border-radius: 8px;
+    padding: 11px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 2px;
+}
+
+.sf-mini-total {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--blue);
+}
+
+/* Modal Footer */
+.sf-modal-foot {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.sf-btn-cancel {
+    padding: 9px 18px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.sf-btn-cancel:hover { background: var(--light); color: var(--text); }
+
+.sf-btn-confirm {
+    padding: 9px 22px;
+    background: var(--orange);
+    color: var(--white);
+    border: none;
+    border-radius: 7px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.sf-btn-confirm:hover { background: var(--orange-dark); }
+
+/* ── Loading Spinner ──────────────────── */
+.sf-spinner-wrap {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.6);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sf-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Order Summary Discount ───────────── */
+.sf-sum-discount-tag {
+    background: #dc2626;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 8px;
+    margin-left: 6px;
+}
+
+.sf-sum-original {
+    font-size: 11px;
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+
+.sf-tot-savings {
+    color: #2e844a;
+    font-weight: 700;
+    font-size: 13px;
+} 
+/* ── Edit Order Button ────────────────── */
+.sf-btn-edit-order {
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px;
+    background: #eff6ff;
+    color: var(--blue);
+    border: 1.5px solid var(--blue);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.sf-btn-edit-order:hover { background: var(--blue); color: var(--white); }
+
+/* ── Cancel Edit Button ───────────────── */
+.sf-btn-cancel-edit {
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    color: var(--red);
+    border: 1px solid var(--red);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.sf-btn-cancel-edit:hover { background: var(--red-bg); }
+
+/* ── Edit Order Popup Rows ────────────── */
+.sf-edit-order-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 4px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 6px;
+}
+
+.sf-edit-order-row:hover { background: var(--light); }
+
+.sf-edit-order-left { display: flex; flex-direction: column; gap: 4px; }
+
+.sf-edit-order-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.sf-edit-order-meta {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+/* Status badges */
+.sf-status {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 8px;
+    text-transform: uppercase;
+}
+
+.sf-status-new      { background: #dbeafe; color: #1d4ed8; }
+.sf-status-progress { background: #fef3c7; color: #92400e; }
+.sf-status-served   { background: #d1fae5; color: #065f46; }

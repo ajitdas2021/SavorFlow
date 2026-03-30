@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <!-- <logo>Screenshot_20260310_at_113725AM</logo>
+        <logoVersion>1</logoVersion> -->
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <description>Where Hunger meets the Taste...
+Food Ordering System</description>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>SavorFlow</label>
+    <navType>Standard</navType>
+    <uiType>Lightning</uiType>
+    <utilityBar>SavorFlow_UtilityBar</utilityBar>
+</CustomApplication>

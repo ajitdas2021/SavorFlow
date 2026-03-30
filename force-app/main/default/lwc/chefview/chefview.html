@@ -1,0 +1,130 @@
+<template>
+    <div class="ch-wrapper">
+
+        <!-- ═══ HEADER ═══ -->
+        <div class="ch-header">
+            <div class="ch-brand">
+                <span class="ch-icon">👨‍🍳</span>
+                <div>
+                    <div class="ch-title"><span class="ch-savor">Savor</span><span class="ch-flow">Flow</span></div>
+                    <div class="ch-sub">Chef Kitchen View</div>
+                </div>
+            </div>
+            <div class="ch-stats">
+                <div class="ch-stat">
+                    <div class="ch-stat-num ch-new-col">{newCount}</div>
+                    <div class="ch-stat-lbl">New</div>
+                </div>
+                <div class="ch-stat">
+                    <div class="ch-stat-num ch-prog-col">{inProgressCount}</div>
+                    <div class="ch-stat-lbl">In Progress</div>
+                </div>
+            </div>
+            <button class="ch-refresh" onclick={loadOrders}>🔄 Refresh</button>
+        </div>
+
+        <!-- ═══ KANBAN COLUMNS ═══ -->
+        <div class="ch-kanban">
+
+            <!-- NEW Column -->
+            <div class="ch-col">
+                <div class="ch-col-head ch-col-new">
+                    <span>🆕 New Orders</span>
+                    <span class="ch-col-count">{newCount}</span>
+                </div>
+                <div class="ch-cards">
+                    <template if:true={hasNewOrders}>
+                        <template for:each={newOrders} for:item="order">
+                            <div key={order.Id} class="ch-card ch-card-new">
+                                <div class="ch-card-head">
+                                    <div class="ch-order-name">{order.Name}</div>
+                                    <div class="ch-order-time">{order.formattedTime}</div>
+                                </div>
+                                <div class="ch-order-meta">
+                                    <span class="ch-meta-item">🪑 Table {order.Table_Number__c}</span>
+                                    <span class="ch-meta-item">👤 {order.Waiter_Name__c}</span>
+                                </div>
+                                <div class="ch-divider"></div>
+                                <div class="ch-items-list">
+                                    <template for:each={order.orderItems} for:item="item">
+                                        <div key={item.Id} class="ch-item-row">
+                                            <span class="ch-item-name">{item.Food_Item__r.Name}</span>
+                                            <span class="ch-item-qty">x{item.Quantity__c}</span>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button
+                                    class="ch-btn-progress"
+                                    data-id={order.Id}
+                                    onclick={markInProgress}>
+                                    🍳 Start Preparing
+                                </button>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={hasNewOrders}>
+                        <div class="ch-empty">
+                            <div></div>
+                            <div>No new orders</div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- IN PROGRESS Column -->
+            <div class="ch-col">
+                <div class="ch-col-head ch-col-prog">
+                    <span>🍳 In Progress</span>
+                    <span class="ch-col-count">{inProgressCount}</span>
+                </div>
+                <div class="ch-cards">
+                    <template if:true={hasInProgressOrders}>
+                        <template for:each={inProgressOrders} for:item="order">
+                            <div key={order.Id} class="ch-card ch-card-prog">
+                                <div class="ch-card-head">
+                                    <div class="ch-order-name">{order.Name}</div>
+                                    <div class="ch-order-time">{order.formattedTime}</div>
+                                </div>
+                                <div class="ch-order-meta">
+                                    <span class="ch-meta-item">🪑 Table {order.Table_Number__c}</span>
+                                    <span class="ch-meta-item">👤 {order.Waiter_Name__c}</span>
+                                </div>
+                                <div class="ch-divider"></div>
+                                <div class="ch-items-list">
+                                    <template for:each={order.orderItems} for:item="item">
+                                        <div key={item.Id} class="ch-item-row">
+                                            <span class="ch-item-name">{item.Food_Item__r.Name}</span>
+                                            <span class="ch-item-qty">x{item.Quantity__c}</span>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button
+                                    class="ch-btn-ready"
+                                    data-id={order.Id}
+                                    onclick={markReady}>
+                                     Mark Ready
+                                </button>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={hasInProgressOrders}>
+                        <div class="ch-empty">
+                            <div>🍽️</div>
+                            <div>Nothing cooking yet</div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Loading Spinner -->
+    <template if:true={isLoading}>
+        <div class="ch-spinner-wrap">
+            <div class="ch-spinner"></div>
+        </div>
+    </template>
+
+</template>

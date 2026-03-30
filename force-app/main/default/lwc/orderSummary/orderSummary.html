@@ -1,0 +1,24 @@
+<template>
+
+    <div class="sf-order">
+
+        <h3>Order Summary</h3>
+
+        <template if:true={hasOrder}>
+            <template for:each={orderLines} for:item="line">
+                <div key={line.Id}>
+                    {line.Name} x {line.qty}
+                </div>
+            </template>
+
+            <div class="total">Subtotal: Rs.{subtotal}</div>
+            <div class="total">Total: Rs.{grandTotal}</div>
+        </template>
+
+        <template if:false={hasOrder}>
+            <div>No items selected</div>
+        </template>
+
+    </div>
+
+</template>

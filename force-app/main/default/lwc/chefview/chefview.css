@@ -1,0 +1,325 @@
+/* ════════════════════════════════════════
+   SAVOR FLOW — Chef Kitchen View
+════════════════════════════════════════ */
+
+:host {
+    display: block;
+    min-height: 100vh;
+    font-family: 'Salesforce Sans', -apple-system, sans-serif;
+    --orange     : #e67e00;
+    --orange-dark: #cc6f00;
+    --blue       : #0176d3;
+    --blue-dark  : #0165b8;
+    --green      : #2e844a;
+    --green-bg   : #cdefc4;
+    --amber      : #dd5a0d;
+    --amber-bg   : #fdebd0;
+    --border     : #e5e7eb;
+    --bg         : #f4f6f9;
+    --white      : #ffffff;
+    --text       : #111827;
+    --muted      : #6b7280;
+    --light      : #f3f4f6;
+    --new-border : #0176d3;
+    --new-bg     : #eff6ff;
+    --prog-border: #e67e00;
+    --prog-bg    : #fff7ed;
+}
+
+/* ── Layout ───────────────────────────── */
+.ch-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--bg);
+}
+
+/* ── Header ───────────────────────────── */
+.ch-header {
+    background: var(--white);
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.ch-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ch-icon { font-size: 28px; }
+
+.ch-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+}
+
+.ch-savor { color: var(--orange); }
+.ch-flow  { color: var(--blue);   }
+
+.ch-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 1px;
+}
+
+/* Stats */
+.ch-stats {
+    display: flex;
+    gap: 24px;
+}
+
+.ch-stat {
+    text-align: center;
+}
+
+.ch-stat-num {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.ch-stat-lbl {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.ch-new-col  { color: var(--blue);   }
+.ch-prog-col { color: var(--orange); }
+
+/* Refresh Button */
+.ch-refresh {
+    padding: 8px 18px;
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.ch-refresh:hover {
+    background: var(--border);
+}
+
+/* ── Kanban ───────────────────────────── */
+.ch-kanban {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 24px 28px;
+    flex: 1;
+    align-items: start;
+}
+
+/* Column */
+.ch-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.ch-col-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.ch-col-new {
+    background: var(--new-bg);
+    color: var(--blue);
+    border: 1.5px solid var(--new-border);
+}
+
+.ch-col-prog {
+    background: var(--prog-bg);
+    color: var(--amber);
+    border: 1.5px solid var(--prog-border);
+}
+
+.ch-col-count {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* Cards */
+.ch-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ch-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.ch-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.ch-card-new  { border-left: 4px solid var(--blue);   }
+.ch-card-prog { border-left: 4px solid var(--orange);  }
+
+/* Card Header */
+.ch-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.ch-order-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.ch-order-time {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--light);
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+/* Meta */
+.ch-order-meta {
+    display: flex;
+    gap: 12px;
+}
+
+.ch-meta-item {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+/* Divider */
+.ch-divider {
+    height: 1px;
+    background: var(--border);
+}
+
+/* Items List */
+.ch-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ch-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background: var(--light);
+    border-radius: 6px;
+}
+
+.ch-item-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.ch-item-qty {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white);
+    background: var(--blue);
+    border-radius: 10px;
+    padding: 1px 8px;
+}
+
+/* Buttons */
+.ch-btn-progress {
+    width: 100%;
+    padding: 10px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 4px;
+}
+
+.ch-btn-progress:hover { background: var(--blue-dark); }
+
+.ch-btn-ready {
+    width: 100%;
+    padding: 10px;
+    background: var(--green);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 4px;
+}
+
+.ch-btn-ready:hover { background: #236c39; }
+
+/* Empty */
+.ch-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 2;
+    background: var(--white);
+    border-radius: 12px;
+    border: 2px dashed var(--border);
+}
+
+/* Spinner */
+.ch-spinner-wrap {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.6);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ch-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border);
+    border-top-color: var(--orange);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

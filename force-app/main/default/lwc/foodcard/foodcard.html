@@ -1,0 +1,37 @@
+<template>
+    <div class={cardCls}>
+
+        <span class={badgeCls}>{badgeTxt}</span>
+
+        <div class="sf-img-box">
+            <template if:true={hasImg}>
+                <div class="sf-img" lwc:dom="manual" data-imgid={itemId}></div>
+            </template>
+            <template if:false={hasImg}>
+                <div class="sf-img-empty">🍽️</div>
+            </template>
+        </div>
+
+        <template if:true={hasDiscount}>
+            <span class="sf-badge-discount">🎉 Save 15%</span>
+        </template>
+
+        <div class="sf-item-name">{name}</div>
+        <div class="sf-item-cat">{category}</div>
+
+        <template if:true={hasDiscount}>
+            <div class="sf-item-price-original">Rs.{price}</div>
+            <div class="sf-item-price">Rs.{discountedPrice}</div>
+        </template>
+        <template if:false={hasDiscount}>
+            <div class="sf-item-price">Rs.{price}</div>
+        </template>
+
+        <div class="sf-qty-row">
+            <button class="sf-btn-minus" onclick={handleMinus} disabled={isZero}>−</button>
+            <span class={qtyCls}>{qty}</span>
+            <button class="sf-btn-plus" onclick={handlePlus} disabled={notAvail}>+</button>
+        </div>
+
+    </div>
+</template>

@@ -1,0 +1,186 @@
+<template>
+    <div class="rc-wrapper">
+
+        <!-- HEADER -->
+        <div class="rc-header">
+            <div class="rc-brand">
+                <span class="rc-icon">💁</span>
+                <div>
+                    <div class="rc-title"><span class="rc-savor">Savor</span><span class="rc-flow">Flow</span></div>
+                    <div class="rc-sub">Receptionist Billing View</div>
+                </div>
+            </div>
+            <div class="rc-stats">
+                <div class="rc-stat-num">{servedCount}</div>
+                <div class="rc-stat-lbl">Served Orders</div>
+            </div>
+            <button class="rc-refresh" onclick={loadOrders}>🔄 Refresh</button>
+        </div>
+
+        <!-- MAIN -->
+        <div class="rc-content">
+
+            <!-- LEFT PANEL -->
+            <div class="rc-list-panel">
+                <div class="rc-list-head">Ready for Billing</div>
+
+                <template if:true={hasOrders}>
+                    <template for:each={orders} for:item="order">
+                        <div key={order.Id} class={order.cardCls} data-id={order.Id} onclick={onSelectOrder}>
+                            <div class="rc-list-top">
+                                <div class="rc-list-name">{order.Name}</div>
+                                <div class="rc-list-time">{order.formattedTime}</div>
+                            </div>
+                            <div class="rc-list-meta">
+                                <span>🪑 Table {order.Table_Number__c}</span>
+                                <!-- <span class="rc-list-amt">Rs.{order.Total_Amount__c}</span> -->
+                                 <span class="rc-list-amt">Rs.{order.grandTotal}</span>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+
+                <template if:false={hasOrders}>
+                    <div class="rc-empty">
+                        <div>🍽️</div>
+                        <div>No served orders yet</div>
+                    </div>
+                </template>
+
+                <template if:true={hasBilledOrders}>
+                    <div class="rc-list-head rc-billed-head">✅ Already Billed</div>
+                    <template for:each={billedOrders} for:item="order">
+                        <div key={order.Id} class="rc-list-card rc-list-card-billed">
+                            <div class="rc-list-top">
+                                <div class="rc-list-name">{order.Name}</div>
+                                <div class="rc-list-time">{order.formattedTime}</div>
+                            </div>
+                            <div class="rc-list-meta">
+                                <span>🪑 Table {order.Table_Number__c}</span>
+                                <!-- <span class="rc-list-amt">Rs.{order.Total_Amount__c}</span> -->
+                                 <span class="rc-list-amt">Rs.{order.grandTotal}</span>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </div>
+
+            <!-- RIGHT PANEL: BILL -->
+            <div class="rc-bill-panel">
+                <template if:true={selectedOrder}>
+                    <div class="rc-bill">
+
+                        <!-- Bill Header -->
+                        <div class="rc-bill-top">
+                            <div class="rc-restaurant-name">
+                                <span class="rc-savor">Savor</span><span class="rc-flow">Flow</span>
+                            </div>
+                            <div class="rc-restaurant-tag">Where Hunger meets the Taste...</div>
+                        </div>
+
+                        <div class="rc-divider"></div>
+
+                        <!-- Order Meta -->
+                        <div class="rc-meta-grid">
+                            <div class="rc-meta-row">
+                                <span class="rc-meta-lbl">Order</span>
+                                <span class="rc-meta-val">{selectedOrder.Name}</span>
+                            </div>
+                            <div class="rc-meta-row">
+                                <span class="rc-meta-lbl">Table</span>
+                                <span class="rc-meta-val">{selectedOrder.Table_Number__c}</span>
+                            </div>
+                            <div class="rc-meta-row">
+                                <span class="rc-meta-lbl">Date</span>
+                                <span class="rc-meta-val">{selectedOrder.formattedTime}</span>
+                            </div>
+                            <div class="rc-meta-row">
+                                <span class="rc-meta-lbl">Waiter</span>
+                                <span class="rc-meta-val">{selectedOrder.Waiter_Name__c}</span>
+                            </div>
+                        </div>
+
+                        <div class="rc-divider"></div>
+
+                        <!-- Items Table -->
+                        <table class="rc-table">
+                            <thead>
+                                <tr>
+                                    <th class="rc-th-left">Item</th>
+                                    <th class="rc-th-right">Qty</th>
+                                    <th class="rc-th-right">Original</th>
+                                    <th class="rc-th-right">Final</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={selectedOrder.orderItems} for:item="item">
+                                    <tr key={item.Id}>
+                                        <td class="rc-td-name">
+                                            {item.Food_Item__r.Name}
+                                            <template if:true={item.hasDiscount}>
+                                                <span class="rc-disc-badge">15% off</span>
+                                            </template>
+                                        </td>
+                                        <td class="rc-td-right">{item.Quantity__c}</td>
+                                        <td class="rc-td-original">Rs.{item.originalTotal}</td>
+                                        <td class="rc-td-final">Rs.{item.finalTotal}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+
+                        <div class="rc-divider rc-divider-dashed"></div>
+
+                        <!-- Savings Row -->
+                        <template if:true={selectedOrder.hasSavings}>
+                            <div class="rc-savings-row">
+                                <span>🎉 You Saved</span>
+                                <span>Rs.{selectedOrder.totalSavings}</span>
+                            </div>
+                        </template>
+
+                        <!-- Grand Total -->
+                        <div class="rc-total-row">
+                            <span class="rc-total-lbl">Grand Total</span>
+                            <!-- <span class="rc-total-amt">Rs.{selectedOrder.Total_Amount__c}</span> -->
+                            <span class="rc-total-amt">Rs.{selectedOrder.grandTotal}</span> 
+                        </div>
+
+                        <div class="rc-divider"></div>
+
+                        <div class="rc-thankyou">Thank you for dining with us! 🙏</div>
+
+                        <!-- Buttons -->
+                        <div class="rc-actions">
+                            <button class="rc-btn-print" onclick={onPrint}>🖨️ Print Bill</button>
+                            <button class="rc-btn-done" data-id={selectedOrder.Id} onclick={onDone}> Done</button>
+                        </div>
+
+                    </div>
+                </template>
+
+                <template if:false={selectedOrder}>
+                    <div class="rc-empty-bill">
+                        <div class="rc-empty-icon">🧾</div>
+                        <div class="rc-empty-txt">Select an order to view bill</div>
+                        <div class="rc-empty-sub">Click any order from the left panel</div>
+                    </div>
+                </template>
+            </div>
+
+        </div>
+    </div>
+
+    <template if:true={isLoading}>
+        <div class="rc-spinner-wrap">
+            <div class="rc-spinner"></div>
+        </div>
+    </template>
+
+
+
+   
+
+
+
+</template>

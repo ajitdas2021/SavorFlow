@@ -1,0 +1,245 @@
+<template>
+
+    <div class="sf-wrapper">
+
+        <!-- ═══ LEFT: MENU PANEL ═══ -->
+        <div class="sf-menu">
+
+            <!-- Top Bar -->
+            <div class="sf-topbar">
+                <div class="sf-brand">
+                    <span class="sf-brand-icon">🍽️</span>
+                    <div>
+                        <div class="sf-brand-name"><span class="sf-savor">Savor</span><span class="sf-flow">Flow</span></div>
+                        <div class="sf-brand-sub">Waiter Portal</div>
+                    </div>
+                </div>
+                <div class="sf-badge">
+                    <span>{totalQty}</span>&nbsp;item(s)
+                </div>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="sf-cats">
+                <template for:each={categories} for:item="cat">
+                    <button
+                        key={cat.name}
+                        data-cat={cat.name}
+                        class={cat.cls}
+                        onclick={onCat}>
+                        {cat.name}
+                    </button>
+                </template>
+            </div>
+
+            <!-- Food Cards Grid -->
+            <div class="sf-grid">
+                <template if:true={hasItems}>
+                    <template for:each={visibleItems} for:item="item">
+                        <c-foodcard
+                            key={item.Id}
+                            item-id={item.Id}
+                            name={item.Name}
+                            category={item.Category__c}
+                            price={item.Price__c}
+                            qty={item.qty}
+                            available={item.available}
+                            has-img={item.hasImg}
+                            img-html={item.imgHtml}
+                            has-discount={item.hasDiscount}
+                            discounted-price={item.discountedPrice}
+                            onplus={onPlus}
+                            onminus={onMinus}>
+                        </c-foodcard>
+                    </template>
+                </template>
+
+                <template if:false={hasItems}>
+                    <div class="sf-empty">
+                        <div>🔍</div>
+                        <div>No items in this category</div>
+                    </div>
+                </template>
+            </div>
+
+        </div>
+
+        <!-- ═══ RIGHT: ORDER PANEL ═══ -->
+        <div class="sf-order">
+
+            <div class="sf-order-head">
+                <div class="sf-order-title">{orderPanelTitle}</div>
+                <div class="sf-order-sub">{orderPanelSub}</div>
+                <!-- Edit Order Button -->
+                <button class="sf-btn-edit-order" onclick={onOpenEditPopup}>✏️ Edit Existing Order</button>
+            </div>
+
+            <div class="sf-order-body">
+                <template if:true={hasOrder}>
+
+                    <table class="sf-table">
+                        <thead>
+                            <tr>
+                                <th class="th-item">Item</th>
+                                <th class="th-qty">Qty</th>
+                                <th class="th-price">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={orderLines} for:item="line">
+                                <tr key={line.Id}>
+                                    <td class="td-name">
+                                        {line.Name}
+                                        <template if:true={line.hasDiscount}>
+                                            <span class="sf-sum-discount-tag">15% off</span>
+                                        </template>
+                                    </td>
+                                    <td class="td-qty">
+                                        <span class="sf-qty-pill">{line.qty}</span>
+                                    </td>
+                                    <td class="td-amt">
+                                        <template if:true={line.hasDiscount}>
+                                            <div class="sf-sum-original">Rs.{line.originalAmt}</div>
+                                        </template>
+                                        Rs.{line.amt}
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+
+                    <div class="sf-totals">
+                        <div class="sf-tot-row">
+                            <span>Subtotal</span>
+                            <span>Rs.{subtotal}</span>
+                        </div>
+                        <template if:true={hasSavings}>
+                            <div class="sf-tot-row sf-tot-savings">
+                                <span>🎉 You Save</span>
+                                <span>- Rs.{totalSavings}</span>
+                            </div>
+                        </template>
+                        <div class="sf-tot-row sf-tot-grand">
+                            <span>Grand Total</span>
+                            <span>Rs.{grandTotal}</span>
+                        </div>
+                    </div>
+
+                </template>
+
+                <template if:false={hasOrder}>
+                    <div class="sf-order-empty">
+                        <div class="sf-order-empty-icon">🛒</div>
+                        <div class="sf-order-empty-txt">No items selected</div>
+                        <div class="sf-order-empty-sub">Add items from the menu</div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Buttons -->
+            <div class="sf-order-foot">
+                <button class="sf-btn-place" onclick={onPlaceOrder} disabled={noOrder}>
+                    {placeOrderLabel}
+                </button>
+                <button class="sf-btn-clear" onclick={onClear} disabled={noOrder}>
+                    🗑️ Clear
+                </button>
+                <template if:true={isEditMode}>
+                    <button class="sf-btn-cancel-edit" onclick={onCancelEdit}>✕ Cancel Edit</button>
+                </template>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ═══ EDIT ORDER POPUP ═══ -->
+    <template if:true={showEditPopup}>
+        <div class="sf-overlay" onclick={onCloseEditPopup}>
+            <div class="sf-modal" onclick={onModalClick}>
+
+                <div class="sf-modal-head">
+                    <div class="sf-modal-title">✏️ Select Order to Edit</div>
+                    <button class="sf-modal-close" onclick={onCloseEditPopup}>✕</button>
+                </div>
+
+                <div class="sf-modal-body">
+                    <template if:true={hasActiveOrders}>
+                        <template for:each={activeOrders} for:item="order">
+                            <div key={order.Id} class="sf-edit-order-row" data-id={order.Id} onclick={onSelectEditOrder}>
+                                <div class="sf-edit-order-left">
+                                    <div class="sf-edit-order-name">{order.Name}</div>
+                                    <div class="sf-edit-order-meta">🪑 Table {order.Table_Number__c} &nbsp;·&nbsp; 👤 {order.Waiter_Name__c}</div>
+                                </div>
+                                <span class={order.statusCls}>{order.Status__c}</span>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={hasActiveOrders}>
+                        <div class="sf-order-empty">
+                            <div class="sf-order-empty-icon">📋</div>
+                            <div class="sf-order-empty-txt">No active orders</div>
+                        </div>
+                    </template>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <!-- ═══ CONFIRM ORDER POPUP ═══ -->
+    <template if:true={showModal}>
+        <div class="sf-overlay" onclick={onOverlayClick}>
+            <div class="sf-modal" onclick={onModalClick}>
+
+                <div class="sf-modal-head">
+                    <div class="sf-modal-title">🧾 Confirm Order</div>
+                    <button class="sf-modal-close" onclick={onCloseModal}>✕</button>
+                </div>
+
+                <div class="sf-modal-body">
+
+                    <div class="sf-field">
+                        <label class="sf-label">Order Name</label>
+                        <div class="sf-auto-val">{modalOrderName}</div>
+                    </div>
+
+                    <div class="sf-field">
+                        <label class="sf-label">Order Date & Time</label>
+                        <div class="sf-auto-val">{modalDateTime}</div>
+                    </div>
+
+                    <div class="sf-field">
+                        <label class="sf-label">Waiter Name <span class="sf-req">*</span></label>
+                        <input type="text" class="sf-input" value={waiterName} readonly style="background:#f3f4f6;cursor:not-allowed;" />
+                    </div>
+
+                    <div class="sf-field">
+                        <label class="sf-label">Table Number <span class="sf-req">*</span></label>
+                        <input type="number" class="sf-input" placeholder="Enter table number" value={tableNumber} oninput={onTable} />
+                    </div>
+
+                    <div class="sf-mini-summary">
+                        <span>{totalQty} item(s)</span>
+                        <span class="sf-mini-total">Rs.{grandTotal}</span>
+                    </div>
+
+                </div>
+
+                <div class="sf-modal-foot">
+                    <button class="sf-btn-cancel" onclick={onCloseModal}>Cancel</button>
+                    <button class="sf-btn-confirm" onclick={onConfirm}> Confirm Order</button>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <!-- ═══ LOADING SPINNER ═══ -->
+    <template if:true={isLoading}>
+        <div class="sf-spinner-wrap">
+            <div class="sf-spinner"></div>
+        </div>
+    </template>
+
+</template>

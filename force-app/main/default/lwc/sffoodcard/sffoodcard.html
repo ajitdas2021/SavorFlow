@@ -1,0 +1,43 @@
+<template>
+    <div class={cardCls}>
+
+        <!-- Availability Badge -->
+        <span class={badgeCls}>{badgeTxt}</span>
+
+        <!-- Food Image -->
+        <div class="sf-img-box">
+            <template if:true={item.hasImg}>
+                <div class="sf-img" lwc:dom="manual" data-imgid={item.Id}></div>
+            </template>
+            <template if:false={item.hasImg}>
+                <div class="sf-img-empty">🍽️</div>
+            </template>
+        </div>
+
+        <!-- Discount Badge -->
+        <template if:true={item.hasDiscount}>
+            <span class="sf-badge-discount">🎉 Save 15%</span>
+        </template>
+
+        <!-- Item Info -->
+        <div class="sf-item-name">{item.Name}</div>
+        <div class="sf-item-cat">{item.Category__c}</div>
+
+        <!-- Price -->
+        <template if:true={item.hasDiscount}>
+            <div class="sf-item-price-original">Rs.{item.Price__c}</div>
+            <div class="sf-item-price">Rs.{item.discountedPrice}</div>
+        </template>
+        <template if:false={item.hasDiscount}>
+            <div class="sf-item-price">Rs.{item.Price__c}</div>
+        </template>
+
+        <!-- Qty Controls -->
+        <div class="sf-qty-row">
+            <button class="sf-btn-minus" onclick={handleMinus} disabled={isZero}>−</button>
+            <span class={qtyCls}>{item.qty}</span>
+            <button class="sf-btn-plus" onclick={handlePlus} disabled={item.notAvail}>+</button>
+        </div>
+
+    </div>
+</template>

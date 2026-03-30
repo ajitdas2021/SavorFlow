@@ -1,0 +1,168 @@
+<template>
+    <div class="md-wrapper">
+
+        <!-- ═══ HEADER ═══ -->
+        <div class="md-header">
+            <div class="md-brand">
+                <span class="md-icon">📊</span>
+                <div>
+                    <div class="md-title"><span class="md-savor">Savor</span><span class="md-flow">Flow</span></div>
+                    <div class="md-sub">Manager Dashboard</div>
+                </div>
+            </div>
+            <div class="md-greeting">
+                <template if:true={stats}>
+                    <span class="md-hi">👋 Hi, {stats.managerName}!</span>
+                    <span class="md-date">{todayDate}</span>
+                </template>
+            </div>
+            <button class="md-refresh" onclick={loadStats}>🔄 Refresh</button>
+        </div>
+
+        <template if:true={stats}>
+
+            <!-- ═══ STATS CARDS ═══ -->
+            <div class="md-cards">
+                <div class="md-card md-card-blue">
+                    <div class="md-card-icon">🛎️</div>
+                    <div class="md-card-value">{stats.activeOrders}</div>
+                    <div class="md-card-label">Active Orders</div>
+                    <div class="md-card-sub">New + In Progress</div>
+                </div>
+                <div class="md-card md-card-orange">
+                    <div class="md-card-icon">🪑</div>
+                    <div class="md-card-value">{stats.tablesInUse}</div>
+                    <div class="md-card-label">Tables In Use</div>
+                    <div class="md-card-sub">Currently occupied</div>
+                </div>
+                <div class="md-card md-card-green">
+                    <div class="md-card-icon">💰</div>
+                    <div class="md-card-value">Rs.{stats.salesToday}</div>
+                    <div class="md-card-label">Gross Sales Today</div>
+                    <div class="md-card-sub">Completed orders</div>
+                </div>
+                <div class="md-card md-card-purple">
+                    <div class="md-card-icon">📈</div>
+                    <div class="md-card-value">Rs.{stats.salesThisMonth}</div>
+                    <div class="md-card-label">Gross Sales This Month</div>
+                    <div class="md-card-sub">Monthly revenue</div>
+                </div>
+            </div>
+
+            <!-- ═══ ORDER STATUS BREAKDOWN ═══ -->
+            <div class="md-section">
+                <div class="md-section-title">📋 Today's Order Status</div>
+                <div class="md-status-grid">
+                    <div class="md-status-card md-status-new">
+                        <div class="md-status-num">{newCount}</div>
+                        <div class="md-status-lbl">New</div>
+                    </div>
+                    <div class="md-status-card md-status-progress">
+                        <div class="md-status-num">{inProgressCount}</div>
+                        <div class="md-status-lbl">In Progress</div>
+                    </div>
+                    <div class="md-status-card md-status-served">
+                        <div class="md-status-num">{servedCount}</div>
+                        <div class="md-status-lbl">Served</div>
+                    </div>
+                    <div class="md-status-card md-status-completed">
+                        <div class="md-status-num">{completedCount}</div>
+                        <div class="md-status-lbl">Completed</div>
+                    </div>
+                    <div class="md-status-card md-status-cancelled">
+                        <div class="md-status-num">{cancelledCount}</div>
+                        <div class="md-status-lbl">Cancelled</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ COMPLETED ORDERS + FILTERS ═══ -->
+            <div class="md-section">
+                <div class="md-section-title">🕐 Completed Orders</div>
+
+                <!-- Filters -->
+                <div class="md-filters">
+                    <div class="md-filter-group">
+                        <label class="md-filter-label">From Date</label>
+                        <input type="date" class="md-filter-input" value={fromDate} onchange={onFromDate} />
+                    </div>
+                    <div class="md-filter-group">
+                        <label class="md-filter-label">To Date</label>
+                        <input type="date" class="md-filter-input" value={toDate} onchange={onToDate} />
+                    </div>
+                    <div class="md-filter-group">
+                        <label class="md-filter-label">Waiter</label>
+                        <select class="md-filter-input" onchange={onWaiterFilter}>
+                            <option value="All">All Waiters</option>
+                            <template for:each={stats.waiterNames} for:item="w">
+                                <option key={w} value={w}>{w}</option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="md-filter-group">
+                        <label class="md-filter-label">Show Records</label>
+                        <select class="md-filter-input" onchange={onLimitChange}>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="0">All</option>
+                        </select>
+                    </div>
+                    <button class="md-btn-apply" onclick={applyFilters}>🔍 Apply</button>
+                    <button class="md-btn-reset" onclick={resetFilters}>↺ Reset</button>
+                </div>
+
+                <!-- Export Buttons -->
+                <div class="md-export-btns">
+                    <!-- <button class="md-btn-csv" onclick={exportCSV}>📥 Export CSV</button> -->
+                    <button class="md-btn-pdf" onclick={exportPDF}>🖨️ Export PDF</button>
+                </div>
+
+                <!-- Table -->
+                <template if:true={hasRecentOrders}>
+                    <table class="md-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Order</th>
+                                <th>Table</th>
+                                <th>Waiter</th>
+                                <th>Gross Amount</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={recentOrders} for:item="order">
+                                <tr key={order.Id}>
+                                    <td class="md-td-num">{order.rowNum}</td>
+                                    <td class="md-td-name">{order.Name}</td>
+                                    <td>Table {order.Table_Number__c}</td>
+                                    <td>{order.Waiter_Name__c}</td>
+                                    <td class="md-td-amt">Rs.{order.Total_Amount__c}</td>
+                                    <td class="md-td-time">{order.formattedDate}</td>
+                                    <td class="md-td-time">{order.formattedTime}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                    <div class="md-record-count">Showing {recentOrders.length} records</div>
+                </template>
+                <template if:false={hasRecentOrders}>
+                    <div class="md-empty">No completed orders found</div>
+                </template>
+            </div>
+
+        </template>
+
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <div class="md-spinner-wrap">
+                <div class="md-spinner"></div>
+            </div>
+        </template>
+
+    </div>
+    <iframe lwc:ref="csvFrame" style="display:none"></iframe>
+</template>
