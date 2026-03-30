@@ -175,10 +175,10 @@ force-app/main/default/
 
 | Role | App Page | Permission Set |
 |---|---|---|
-| Waiter | SavorFlow Home | Standard user access |
+| Waiter | SavorFlow Home | `Waiter_Permission` |
 | Chef | SavorFlow Chef | `Chef_Permission` |
-| Receptionist | SavorFlow Receptionist | Standard user access |
-| Manager | SavorFlow Manager | `SavorFlow Manager` profile |
+| Receptionist | SavorFlow Receptionist | `Receptionist_Permission` |
+| Manager | SavorFlow Manager | `Manager_Permission`|
 
 ---
 
@@ -290,12 +290,7 @@ sf org login web --alias savorflow-dev
 sf project deploy start --source-dir force-app
 ```
 
-**4. Assign Permission Sets**
-```bash
-sf org assign permset --name Chef_Permission --target-org savorflow-dev
-```
-
-**5. Open the org**
+**4. Open the org**
 ```bash
 sf org open --target-org savorflow-dev
 ```
@@ -304,19 +299,6 @@ sf org open --target-org savorflow-dev
 
 ## Deployment
 
-### Deploy individual components
-```bash
-# Deploy a single Apex class
-sf project deploy start --source-dir force-app/main/default/classes/FoodOrderController.cls
-
-# Deploy a single LWC component
-sf project deploy start --source-dir force-app/main/default/lwc/foodorderscreen
-
-# Deploy all triggers
-sf project deploy start --source-dir force-app/main/default/triggers
-```
-
-### Deploy everything
 ```bash
 sf project deploy start --source-dir force-app
 ```
