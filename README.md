@@ -2,7 +2,7 @@
 
 > *Where Hunger meets the Taste...*
 
-A full-stack **Salesforce** restaurant management application built with **Apex**, **Lightning Web Components (LWC)**, and **Salesforce Flows**. SavorFlow digitizes the entire restaurant order lifecycle — from a waiter placing an order to the chef preparing it, the receptionist billing the customer, and the manager tracking daily sales.
+A full-stack **Salesforce** food order management application that can be used by any restaurants, hotels or cafes built with **Apex**, **Lightning Web Components (LWC)**, and **Salesforce Flows**. SavorFlow digitizes the entire restaurant order lifecycle — from a waiter placing an order to the chef preparing it, the receptionist billing the customer, and the manager tracking daily sales.
 
 ---
 
@@ -27,7 +27,7 @@ A full-stack **Salesforce** restaurant management application built with **Apex*
 
 ## Overview
 
-SavorFlow is a Salesforce-native restaurant POS (Point of Sale) system that manages the full order workflow across four roles — Waiter, Chef, Receptionist, and Manager. Each role has a dedicated Lightning App Page with a custom LWC interface tailored to their specific responsibilities.
+SavorFlow is a Salesforce-native food ordering POS (Point of Sale) system that manages the full order workflow across four roles — Waiter, Chef, Receptionist, and Manager. Each role has a dedicated Lightning App Page with a custom LWC interface tailored to their specific responsibilities.
 
 ---
 
