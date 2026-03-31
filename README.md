@@ -37,7 +37,7 @@ SavorFlow is a Salesforce-native food ordering POS (Point of Sale) system that m
 - Browse food menu with live availability status
 - Filter items by category (Meal, Drinks, etc.)
 - Add items to order with quantity controls
-- Automatic 15% meal discount between 9:00 AM and 4:00 PM (NPT)
+- Automatic 15% meal discount between 9:00 AM and 12:00 PM (NPT)
 - Edit existing active orders by adding new items
 - Stock validation for Drinks before placing order
 - Table duplicate validation — prevents placing a new order on a table that already has an active order
