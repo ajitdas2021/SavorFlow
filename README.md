@@ -2,7 +2,7 @@
 
 > *Where Hunger meets the Taste...*
 
-A full-stack **Salesforce** food order management application that can be used by any restaurants, hotels or cafes built with **Apex**, **Lightning Web Components (LWC)**, and **Salesforce Flows**. SavorFlow digitizes the entire restaurant order lifecycle — from a waiter placing an order to the chef preparing it, the receptionist billing the customer, and the manager tracking daily sales.
+A full-stack **Salesforce** food order management application that can be used by any restaurants, hotels or cafes built with **Apex**, **Lightning Web Components (LWC)**, and **Salesforce Flows**. SavorFlow digitizes the entire food order lifecycle — from a waiter placing an order to the chef preparing it, the receptionist billing the customer, and the manager tracking daily sales.
 
 ---
 
